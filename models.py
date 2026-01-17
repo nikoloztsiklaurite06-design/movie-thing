@@ -3,7 +3,6 @@ from flask_login import UserMixin
 
 
 class Movie(db.Model):
-    # ეს ხაზი დააზღვევს შეცდომას, თუ ბაზა ბოლომდე არ წაიშალა
     __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
@@ -16,10 +15,9 @@ class Movie(db.Model):
 
     director = db.Column(db.String(100), nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    genre = db.Column(db.String(100), nullable=False)  # გავზარდეთ ზომა მრავალი ჟანრისთვის
+    genre = db.Column(db.String(100), nullable=False)
     img_url = db.Column(db.String(300), nullable=False)
 
-    # ახალი ველი ბმულისთვის
     movie_url = db.Column(db.String(500), nullable=False)
 
     rating = db.Column(db.Float, default=0.0)

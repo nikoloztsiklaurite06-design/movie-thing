@@ -1,16 +1,12 @@
 from flask import render_template, redirect, url_for, request, flash
 from flask_login import login_user, logout_user, login_required, current_user
 
-# ეს ფაილები ჩვენ შევქმენით, დარწმუნდი რომ პროექტში არსებობს
 from ext import app, db
 from models import Movie, User
 from forms import AddMovieForm, RegisterForm, LoginForm
 from translations import translations
 
 
-# ==========================
-# მთავარი გვერდი (HOME)
-# ==========================
 @app.route("/")
 def index():
     # ენის შერჩევა
@@ -21,17 +17,14 @@ def index():
     search_query = request.args.get('search', '')
     genre_query = request.args.get('genre', 'ყველა')
 
-    # ბაზიდან წამოღება და დალაგება რეიტინგის მიხედვით (მაღლიდან დაბლა)
     query = Movie.query.order_by(Movie.rating.desc())
 
-    # ძებნის ლოგიკა
     if search_query:
         query = query.filter(
             (Movie.title_ka.contains(search_query)) |
             (Movie.title_en.contains(search_query))
         )
 
-    # ჟანრის ფილტრაცია (გამოვიყენოთ .contains() მრავალჯერადი ჟანრებისთვის)
     if genre_query and genre_query != 'ყველა':
         query = query.filter(Movie.genre.contains(genre_query))
 
@@ -79,7 +72,6 @@ def add_movie():
             genre=form.genre.data,
             img_url=form.img_url.data,
             rating=form.rating.data,
-            # ჩამატებული ბმულის ველი
             movie_url=form.movie_url.data
         )
         db.session.add(new_movie)
@@ -90,9 +82,7 @@ def add_movie():
 
     return render_template("add_movie.html", form=form, t=t, current_lang=lang)
 
-# ==========================
-# ფილმის წაშლა (მხოლოდ ადმინი)
-# ==========================
+
 @app.route("/delete_movie/<int:movie_id>")
 @login_required
 def delete_movie(movie_id):
@@ -105,9 +95,7 @@ def delete_movie(movie_id):
     return redirect(url_for('index'))
 
 
-# ==========================
-# რეგისტრაცია
-# ==========================
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     lang = request.args.get('lang', 'ka')
@@ -131,9 +119,7 @@ def register():
     return render_template("register.html", form=form, t=t)
 
 
-# ==========================
-# ავტორიზაცია (Login)
-# ==========================
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     lang = request.args.get('lang', 'ka')
@@ -152,9 +138,6 @@ def login():
     return render_template("login.html", form=form, t=t)
 
 
-# ==========================
-# გამოსვლა (Logout)
-# ==========================
 @app.route("/logout")
 def logout():
     logout_user()

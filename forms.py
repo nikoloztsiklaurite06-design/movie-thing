@@ -3,28 +3,21 @@ from wtforms import StringField, PasswordField, SubmitField, IntegerField, TextA
 from wtforms.validators import DataRequired, Length, NumberRange, EqualTo, URL
 
 class AddMovieForm(FlaskForm):
-    # სათაურები
     title_ka = StringField("სათაური (KA)", validators=[DataRequired(message="შეიყვანეთ ქართული სათაური")])
     title_en = StringField("Title (EN)", validators=[DataRequired(message="Enter English title")])
 
-    # აღწერები
     description_ka = TextAreaField("აღწერა (KA)", validators=[DataRequired(), Length(min=10)])
     description_en = TextAreaField("Description (EN)", validators=[DataRequired(), Length(min=10)])
 
-    # ინფორმაცია
     director = StringField("Director", validators=[DataRequired()])
     year = IntegerField("Year", validators=[DataRequired(), NumberRange(min=1888, max=2026)])
 
-    # ჟანრი
     genre = StringField("Genre (გამოყავით მძიმით)", validators=[DataRequired()])
 
-    # სურათის ლინკი
     img_url = StringField("Image URL", validators=[DataRequired(), URL(message="შეიყვანეთ ვალიდური სურათის ლინკი")])
 
-    # ფილმის ბმული (IMDb/Netflix)
     movie_url = StringField(" Movie URL", validators=[DataRequired(), URL(message="შეიყვანეთ ვალიდური ფილმის ლინკი")])
 
-    # რეიტინგი
     rating = FloatField("Rating (0-10)", validators=[
         DataRequired(),
         NumberRange(min=0, max=10, message="რეიტინგი უნდა იყოს 0-დან 10-მდე")
