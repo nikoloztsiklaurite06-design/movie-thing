@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-lg" style="background-color: #1a1a1a; border-radius: 15px;">
+            <div class="card-body p-5">
+
+                <h2 class="text-center fw-bold mb-4" style="color: #e50914; letter-spacing: 1px;">
+                    {{ t['register'] }}
+                </h2>
+
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-4">
+                        <label class="form-label small text-light fw-bold">Username</label>
+                        {{ form.username(class="form-control form-control-lg border-0 text-white",
+                           placeholder="აირჩიეთ სახელი",
+                           style="background-color: #333; border-radius: 8px;") }}
+                        {% for error in form.username.errors %}
+                            <span class="text-danger small">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-light fw-bold">Password</label>
+                        {{ form.password(class="form-control form-control-lg border-0 text-white",
+                           placeholder="მინიმუმ 6 სიმბოლო",
+                           style="background-color: #333; border-radius: 8px;") }}
+                        {% for error in form.password.errors %}
+                            <span class="text-danger small">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid mt-5">
+                        <button type="submit" class="btn btn-lg fw-bold text-white py-3"
+                                style="background-color: #e50914; border-radius: 8px; transition: 0.3s;">
+                            {{ t['register'] }}
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-secondary small">
+                        უკვე გაქვთ ანგარიში?
+                        <a href="/login" class="text-decoration-none" style="color: #e50914;">{{ t['login'] }}</a>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ინპუტების ფოკუსის ეფექტი */
+    .form-control:focus {
+        background-color: #444 !important;
+        box-shadow: none;
+        outline: 1px solid #e50914;
+    }
+    .form-control::placeholder {
+        color: #777;
+        font-size: 0.9rem;
+    }
+    /* ღილაკის ჰოვერი */
+    .btn:hover {
+        background-color: #b20710 !important;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}

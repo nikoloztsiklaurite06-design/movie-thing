@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="card bg-dark border-secondary mb-5 shadow-sm" style="border-radius: 12px;">
+    <div class="card-body p-4">
+        <form method="GET" action="/" class="row g-3">
+            <input type="hidden" name="lang" value="{{ current_lang }}">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text bg-secondary border-0 text-white">🔍</span>
+                    <input type="text" name="search" class="form-control bg-dark text-white border-secondary"
+                           placeholder="{{ t['search_placeholder'] }}"
+                           value="{{ request.args.get('search', '') }}">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="genre" class="form-select bg-dark text-white border-secondary">
+                    <option value="ყველა">{{ t['all_genres'] }}</option>
+                    {% set genre_list = [
+                        ('Action', 'მძაფრსიუჟეტიანი'),
+                        ('Comedy', 'კომედია'),
+                        ('Drama', 'დრამა'),
+                        ('Horror', 'საშინელებათა'),
+                        ('Sci-Fi', 'ფანტასტიკა'),
+                        ('Thriller', 'თრილერი')
+                    ] %}
+                    {% for eng, geo in genre_list %}
+                        <option value="{{ eng }}" {{ 'selected' if request.args.get('genre') == eng else '' }}>
+                            {{ geo if current_lang == 'ka' else eng }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-netflix w-100 fw-bold">{{ t['filter'] }}</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for movie in movies %}
+    <div class="col">
+        <div class="card h-100 bg-dark text-white border-0 movie-card shadow">
+            <div class="position-relative overflow-hidden" style="border-radius: 10px;">
+
+                <div style="height: 400px; background-color: #2b2b2b; display: flex; align-items: center; justify-content: center;">
+                    {% if movie.img_url %}
+                        <img src="{{ movie.img_url }}" class="card-img-top movie-img" style="height: 100%; width: 100%; object-fit: cover;"
+                             onerror="this.src='https://via.placeholder.com/400x600?text=No+Poster';">
+                    {% else %}
+                        <div class="text-muted text-center"><i class="bi bi-film fs-1"></i><br>No Image</div>
+                    {% endif %}
+                </div>
+
+                <div class="movie-overlay d-flex flex-column justify-content-end p-3">
+                    <h5 class="fw-bold text-danger mb-1">
+                        {% if current_lang == 'ka' %}{{ movie.title_ka }}{% else %}{{ movie.title_en }}{% endif %}
+                    </h5>
+
+                    <p class="small text-secondary mb-1">
+                        {% if current_lang == 'ka' %}
+                            {{ movie.genre.replace('Action', 'მძაფრსიუჟეტიანი').replace('Comedy', 'კომედია').replace('Drama', 'დრამა').replace('Horror', 'საშინელებათა').replace('Sci-Fi', 'ფანტასტიკა').replace('Thriller', 'თრილერი') }}
+                        {% else %}
+                            {{ movie.genre }}
+                        {% endif %}
+                    </p>
+
+                    <div class="text-warning small mb-2">⭐ {{ movie.rating }} / 10</div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ movie.movie_url }}" target="_blank" class="btn btn-netflix btn-sm flex-grow-1">
+                           <i class="bi bi-play-fill"></i> ნახვა
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5">
+        <h4 class="text-secondary">ფილმები ვერ მოიძებნა</h4>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .movie-card { transition: transform 0.3s ease; }
+    .movie-card:hover { transform: scale(1.03); }
+    .movie-img { transition: 0.5s ease; }
+    .movie-card:hover .movie-img { filter: brightness(30%); }
+    .movie-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7); opacity: 0; transition: 0.3s;
+    }
+    .movie-card:hover .movie-overlay { opacity: 1; }
+</style>
+
+{% endblock %}

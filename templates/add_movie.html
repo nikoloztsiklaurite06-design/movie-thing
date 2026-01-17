@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-dark border-secondary shadow-lg" style="border-radius: 15px;">
+                <div class="card-header border-secondary p-4 text-center">
+                    <h2 class="text-danger fw-bold mb-0 text-uppercase">
+                        <i class="bi bi-plus-circle me-2"></i> {{ t['add_movie'] }}
+                    </h2>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-light fw-bold small">სათაური (KA)</label>
+                                {{ form.title_ka(class="form-control bg-dark text-white border-secondary") }}
+                                {% for error in form.title_ka.errors %}<span class="text-danger small">{{ error }}</span>{% endfor %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-light fw-bold small">Title (EN)</label>
+                                {{ form.title_en(class="form-control bg-dark text-white border-secondary") }}
+                                {% for error in form.title_en.errors %}<span class="text-danger small">{{ error }}</span>{% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-light fw-bold small">რეჟისორი</label>
+                                {{ form.director(class="form-control bg-dark text-white border-secondary") }}
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label text-light fw-bold small">წელი</label>
+                                {{ form.year(class="form-control bg-dark text-white border-secondary") }}
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label text-light fw-bold small">რეიტინგი</label>
+                                {{ form.rating(class="form-control bg-dark text-white border-secondary") }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-bold small">ჟანრი</label>
+                            {{ form.genre(class="form-select bg-dark text-white border-secondary") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-bold small">სურათის URL</label>
+                            {{ form.img_url(class="form-control bg-dark text-white border-secondary") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-bold small">Movie URL</label>
+                            {{ form.movie_url(class="form-control bg-dark text-white border-secondary", placeholder="https://...") }}
+                            {% if form.movie_url.errors %}
+                                {% for error in form.movie_url.errors %}
+                                    <span class="text-danger small">{{ error }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-bold small">აღწერა (KA)</label>
+                            {{ form.description_ka(class="form-control bg-dark text-white border-secondary", rows="3") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-bold small">Description (EN)</label>
+                            {{ form.description_en(class="form-control bg-dark text-white border-secondary", rows="3") }}
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg fw-bold">დამატება</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus, .form-select:focus {
+        background-color: #2b2b2b !important;
+        border-color: #e50914 !important;
+        color: white !important;
+        box-shadow: none;
+    }
+</style>
+{% endblock %}
