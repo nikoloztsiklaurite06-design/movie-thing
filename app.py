@@ -13,7 +13,10 @@ def delete_movie(movie_id):
     db.session.commit()
     return redirect(url_for('index'))
 
+import routes
 
+# --- ცვლილება აქ არის ---
+# ეს ნაწილი ამოვიტანეთ main-დან გარეთ, რომ Render-მა დაინახოს
 with app.app_context():
     db.create_all()
 # ------------------------
