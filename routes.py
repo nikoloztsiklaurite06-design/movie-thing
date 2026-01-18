@@ -9,11 +9,9 @@ from translations import translations
 
 @app.route("/")
 def index():
-    # ენის შერჩევა
     lang = request.args.get('lang', 'ka')
     t = translations.get(lang, translations['ka'])
 
-    # ფილტრაციისა და ძებნის მონაცემების მიღება
     search_query = request.args.get('search', '')
     genre_query = request.args.get('genre', 'ყველა')
 
@@ -95,7 +93,6 @@ def delete_movie(movie_id):
     return redirect(url_for('index'))
 
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     lang = request.args.get('lang', 'ka')
@@ -110,14 +107,13 @@ def register():
         else:
             new_user = User(username=form.username.data,
                             password=form.password.data,
-                            role='User')
+                            role='Admin')
             db.session.add(new_user)
             db.session.commit()
             flash("რეგისტრაცია წარმატებულია, გაიარეთ ავტორიზაცია", "success")
             return redirect(url_for('login'))
 
     return render_template("register.html", form=form, t=t)
-
 
 
 @app.route("/login", methods=["GET", "POST"])
